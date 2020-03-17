@@ -31,7 +31,7 @@ class TemperatureMonitor(temperature_monitor_pb2_grpc.TemperatureMonitorServicer
         """
         while context.is_active():
             time.sleep(1)
-            yield CurrentTemperature()
+            yield CurrentTemperature(self, request, context)
 
 
     def MinMaxTemperature(self, request, context):
