@@ -21,7 +21,7 @@ class TemperatureMonitor(temperature_monitor_pb2_grpc.TemperatureMonitorServicer
             return temperature_monitor_pb2_grpc.CurrentTemperature(celsius=40.0)
         cur_temp = psutil.sensors_temperatures()['bcm2835_thermal'][0].current
         self.temperatures.append(cur_temp)
-        return temperature_monitor_pb2.CurrentTemperature(celsius=cur_temp)
+        return temperature_monitor_pb2.Temperature(celsius=cur_temp)
         
 
     def Temperatures(self, request, context):
@@ -31,7 +31,7 @@ class TemperatureMonitor(temperature_monitor_pb2_grpc.TemperatureMonitorServicer
         """
         while context.is_active():
             time.sleep(1)
-            yield CurrentTemperature(self, request, context)
+            yield Temperature(self, request, context)
 
 
     def MinMaxTemperature(self, request, context):
@@ -44,7 +44,7 @@ class TemperatureMonitor(temperature_monitor_pb2_grpc.TemperatureMonitorServicer
             return temperature_monitor_pb2.MinMaxTemperature(min=40.0, max=40.0)
         min_temp = min(self.temperatures)
         max_temp = max(self.temperatures)
-        return temperature_monitor_pb2.MinMaxTemperature(min=min_temp, max=max_temp)
+        return temperature_monitor_pb2.MinMax(min=min_temp, max=max_temp)
             
 
     def StressTest(self, request, context):
